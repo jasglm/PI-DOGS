@@ -1,12 +1,29 @@
 const { Dog, Temperament } = require("../db");
 const axios = require("axios");
 const URL = "https://api.thedogapi.com/v1/breeds";
-const formatDog = require("../utils/formatDog");
 const { Op } = require("sequelize");
+const formatDog = require("../utils/formatDog");
+
+const formatDogDb = (dog) => {
+	return {
+		id: dog.id,
+		dbDog: true,
+		name: dog.name,
+		image: dog.image,
+		height: dog.height,
+		weight: dog.weight,
+		life_span: dog.life_span,
+		temperament: dog.Temperament
+			? dog.Temperament.map((temp) => temp.name)
+			: [],
+	};
+};
 
 async function searchDogsByName(req, res) {
 	const { name } = req.query;
+	console.log(name);
 	const formattedName = name.toLowerCase();
+
 	try {
 		// Buscar en la base de datos
 		const dbDogs = await Dog.findAll({
@@ -19,7 +36,7 @@ async function searchDogsByName(req, res) {
 		});
 
 		// Formatear perros de la base de datos
-		const formattedDbDogs = dbDogs.map((dog) => formatDog(dog.toJSON()));
+		const formattedDbDogs = dbDogs.map((dog) => formatDogDb(dog.toJSON()));
 
 		// Consultar en la API externa
 		const response = await axios.get(URL);

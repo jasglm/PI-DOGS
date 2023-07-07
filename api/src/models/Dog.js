@@ -32,8 +32,8 @@ module.exports = (sequelize) => {
 				allowNull: false,
 			},
 			temperament: {
-				type: DataTypes.STRING,
-				allowNull: false,
+				type: DataTypes.ARRAY(DataTypes.STRING),
+				allowNull: true,
 			},
 		},
 		{ timestamps: false }

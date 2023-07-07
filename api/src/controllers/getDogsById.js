@@ -8,7 +8,7 @@ const getDogsById = async (req, res) => {
 	try {
 		let dogDetail;
 		const dbDog = await Dog.findByPk(id, {
-			include: Temperament,
+			//include: Temperament,
 		});
 		if (dbDog) {
 			res.status(200).json(dbDog);
